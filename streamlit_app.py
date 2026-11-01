@@ -10,7 +10,7 @@ import time
 import streamlit as st
 
 # --- CƠ CHẾ BẢO MẬT BẰNG MẬT KHẨU ---
-PASSWORD = "123"  # Bạn có thể đổi thành mật khẩu tùy ý ở đây
+PASSWORD = "huyhoangdeptrai"  # Bạn có thể đổi thành mật khẩu tùy ý ở đây
 
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
