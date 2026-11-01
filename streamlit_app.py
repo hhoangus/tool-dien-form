@@ -7,7 +7,24 @@ import pandas as pd
 from datetime import datetime, timedelta
 import random
 import time
+import streamlit as st
 
+# --- CƠ CHẾ BẢO MẬT BẰNG MẬT KHẨU ---
+PASSWORD = "123"  # Bạn có thể đổi thành mật khẩu tùy ý ở đây
+
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+
+if not st.session_state.authenticated:
+    st.title("🔒 Khu vực hạn chế")
+    pwd = st.text_input("Nhập mật khẩu để truy cập công cụ:", type="password")
+    if st.button("Xác nhận"):
+        if pwd == PASSWORD:
+            st.session_state.authenticated = True
+            st.rerun()
+        else:
+            st.error("Sai mật khẩu! Vui lòng hỏi lại tác giả.")
+    st.stop()  # Dừng không cho chạy phần code bên dưới nếu chưa nhập đúng mật khẩu
 st.set_page_config(
     page_title="Smart Survey Generator",
     page_icon="📊",
