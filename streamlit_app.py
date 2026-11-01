@@ -119,37 +119,23 @@ def generate_realistic_timestamps(n_samples, days_back=5):
 
 # --- GIAO DIỆN CHÍNH ---
 st.title("📊 Smart Survey Synthetic Generator (Pro Edition)")
-st.caption("Hỗ trợ gom nhóm Nhân tố (EFA), tối ưu Cronbach's Alpha & Hồi quy tuyến tính (SPSS / SmartPLS)")
+st.caption("👨‍💻 **Phát triển bởi:** Hoàng (FIT - HCMUS) | Công cụ hỗ trợ tạo dữ liệu khảo sát chuẩn thống kê (SPSS / SmartPLS) dành riêng cho bạn bè làm tiểu luận & nghiên cứu khoa học.")
 
-url_input = st.text_input("🔗 Bước 1: Dán đường link Google Form (viewform) vào đây:", placeholder="https://docs.google.com/forms/d/e/.../viewform")
+with st.expander("📖 Hướng dẫn sử dụng nhanh (Đọc 30 giây trước khi chạy)", expanded=False):
+    st.markdown("""
+    **1. Chuẩn bị Google Form trước khi lấy link:**
+    * Vào tab **Cài đặt (Settings)** của Google Form -> **Tắt** nút *"Giới hạn ở 1 lần trả lời"* (Limit to 1 response) và để mục *"Thu thập địa chỉ email"* ở chế độ **Không thu thập**.
+    * Copy đường link gửi cho người điền (link có đuôi `.../viewform` ở cuối).
 
-if url_input:
-    with st.spinner("Đang bóc tách cấu trúc câu hỏi từ Google Form..."):
-        form_data, error = extract_form_data(url_input)
-    
-    if error:
-        st.error(error)
-    elif form_data:
-        st.success(f"Đã tải Form: **{form_data['title']}** (Tổng cộng {len(form_data['questions'])} câu hỏi)")
-        
-        st.divider()
-        st.subheader("⚙️ Bước 2: Thiết lập Mô hình Nghiên cứu & Kịch bản")
+    **2. Các bước tạo dữ liệu đẹp trên Web:**
+    * **Bước 1:** Dán link `viewform` vào ô bên dưới và bấm `Enter`.
+    * **Bước 2:** Chọn số lượng mẫu cần tạo. Nếu bài có chạy **EFA / Hồi quy trên SPSS**, hãy mở mục *Phân nhóm câu hỏi Thang đo* để gán các câu hỏi vào đúng nhóm nhân tố ($X_1, X_2..., Y$).
+    * **Bước 3:** Bấm **Sinh dữ liệu** và kiểm tra bảng điểm **Cronbach's Alpha** (chỉ số hiện màu xanh từ `0.7` đến `0.95` là dữ liệu cực đẹp).
 
-        col1, col2, col3, col4 = st.columns(4)
-        with col1:
-            n_samples = st.number_input("Số lượng mẫu khảo sát:", min_value=20, max_value=1000, value=200, step=10)
-        with col2:
-            num_factors = st.number_input("Số nhóm nhân tố độc lập (X):", min_value=1, max_value=8, value=3, step=1)
-        with col3:
-            consistency = st.slider("Độ gắn kết trong từng nhóm (Alpha):", 0.70, 0.95, 0.84, 0.01)
-        with col4:
-            reg_strength = st.slider("Độ mạnh tác động X -> Y (Hồi quy):", 0.30, 0.90, 0.65, 0.05)
-
-        factor_options = [f"Nhân tố độc lập X{k+1}" for k in range(num_factors)] + ["Biến phụ thuộc Y (Kết quả)"]
-        
-        likert_questions = [q for q in form_data['questions'] if q['is_likert']]
-        other_questions = [q for q in form_data['questions'] if not q['is_likert']]
-
+    **3. Chọn cách lấy dữ liệu an toàn:**
+    * **Cách 1 (Khuyên dùng - Nhanh & An toàn 100%):** Bấm nút **📥 Tải ngay File CSV**, sau đó mở bằng Excel hoặc đưa thẳng vào SPSS/SmartPLS để chạy mô hình.
+    * **Cách 2 (Tăng số lượng hiển thị trên Google Form):** Bấm nút **📨 Tự động điền trực tiếp vào Google Form** và giữ nguyên tab web vài phút để hệ thống rải phiếu tự động.
+    """)
         # Cấu hình chia nhóm EFA cho câu hỏi thang đo
         question_factor_map = {}
         reverse_coded_map = {}
